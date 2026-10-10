@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.20.0)
 
 set(DTS_ROOT ${CMAKE_CURRENT_LIST_DIR}/../../)
 set(BOARD_ROOT ${CMAKE_CURRENT_LIST_DIR}/../../)
+set(SELF_KCONFIG_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/Kconfig)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Core/inc)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/User/inc)

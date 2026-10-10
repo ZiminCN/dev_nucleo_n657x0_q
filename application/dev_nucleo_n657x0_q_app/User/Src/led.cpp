@@ -22,16 +22,36 @@ bool LED::init()
 	return true;
 }
 
-void LED::test_toggle_low()
+void LED::heartbeat_on()
 {
-	gpio_pin_configure_dt(&this->gpio_instance.getGreenLED(), GPIO_OUTPUT_LOW);
-	gpio_pin_configure_dt(&this->gpio_instance.getRedLED(), GPIO_OUTPUT_LOW);
-	gpio_pin_configure_dt(&this->gpio_instance.getBlueLED(), GPIO_OUTPUT_LOW);
+	gpio_pin_configure_dt(&this->gpio_instance.getGreenLED(), GPIO_OUTPUT_ACTIVE);
 }
 
-void LED::test_toggle_high()
+void LED::heartbeat_off()
 {
-	gpio_pin_configure_dt(&this->gpio_instance.getGreenLED(), GPIO_OUTPUT_HIGH);
-	gpio_pin_configure_dt(&this->gpio_instance.getRedLED(), GPIO_OUTPUT_HIGH);
-	gpio_pin_configure_dt(&this->gpio_instance.getBlueLED(), GPIO_OUTPUT_HIGH);
+	gpio_pin_configure_dt(&this->gpio_instance.getGreenLED(), GPIO_OUTPUT_INACTIVE);
+}
+
+void LED::heartbeat_pengpong(struct k_timer *timer_id)
+{
+	(void)timer_id;
+	LED &led_instance = LED::getInstance();
+
+	led_instance.heartbeat_status.count_100ms += 1;
+	if (led_instance.heartbeat_status.count_100ms >= 10) {
+		led_instance.heartbeat_status.count_100ms = 0;
+	}
+
+	if ((led_instance.heartbeat_status.count_100ms == 1) ||
+	    (led_instance.heartbeat_status.count_100ms == 3)) {
+		led_instance.heartbeat_on();
+	} else {
+		led_instance.heartbeat_off();
+	}
+}
+
+void LED::enable_heartbeat()
+{
+	this->timer_instance.timer_register(this->heartbeat_pengpong, nullptr);
+	this->timer_instance.timer_start(this->heartbeat_pengpong, K_MSEC(10), K_MSEC(100));
 }

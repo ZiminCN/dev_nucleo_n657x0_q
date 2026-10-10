@@ -28,16 +28,16 @@ int main(void)
 	LOG_INF("Application version: %s", APP_VERSION_STRING);
 	// Core Class
 	static GPIO &gpio_instance = GPIO::getInstance();
+	static TIMER &timer_instance = TIMER::getInstance();
 
 	// User Class
 	static LED &led_instance = LED::getInstance();
 
 	gpio_instance.init();
+	timer_instance.init();
+	led_instance.enable_heartbeat();
 
 	while (1) {
-		led_instance.test_toggle_low();
-		k_sleep(K_MSEC(500));
-		led_instance.test_toggle_high();
-		k_sleep(K_MSEC(500));
+		k_sleep(K_MSEC(1000));
 	}
 }

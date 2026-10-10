@@ -14,3 +14,4 @@
 
 #include "gpio.hpp"
 #include "led.hpp"
+#include "timer.hpp"

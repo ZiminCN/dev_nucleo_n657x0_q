@@ -17,6 +17,7 @@
 #define __LED_HPP__
 
 #include "gpio.hpp"
+#include "timer.hpp"
 
 class LED
 {
@@ -31,15 +32,25 @@ class LED
 
       public:
 	bool init();
-	void test_toggle_low();
-	void test_toggle_high();
+	void enable_heartbeat();
 
       private:
 	LED() = default;
 	~LED() = default;
-	GPIO &gpio_instance = GPIO::getInstance();
+	void heartbeat_on();
+	void heartbeat_off();
+	static void heartbeat_pengpong(struct k_timer *timer_id);
 
       private:
+	GPIO &gpio_instance = GPIO::getInstance();
+	TIMER &timer_instance = TIMER::getInstance();
+
+      private:
+	struct heartbeat_status_t {
+#define HEARTBEAT_INTERVAL_100ms 10
+		int count_100ms;
+	};
+	struct heartbeat_status_t heartbeat_status = {0};
 };
 
 #endif /* __LED_HPP__ */

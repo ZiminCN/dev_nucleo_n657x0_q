@@ -1,0 +1,7 @@
+source "$(ZEPHYR_BASE)/Kconfig.zephyr"
+
+config TIMER_SLOTS_COUNT
+    int "Number of timer slots"
+    default 8
+    help
+        Define the maximum number of slots that TIMER class can manage
